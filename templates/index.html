@@ -3,24 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduTwin - Accelerate Your Results</title>
-    <!-- Modern Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
+    <title>EduTwin &mdash; Academic Platform</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- GSAP Animation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <!-- tsParticles Engine -->
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 </head>
 <body>
     
-    <!-- Futuristic Network Background -->
-    <div id="tsparticles"></div>
-
-    <!-- Hidden div to pass flash messages to JS -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div id="flash-data" style="display: none;">
@@ -33,56 +21,72 @@
         {% endif %}
     {% endwith %}
 
-    <div class="container">
-        <header>
-            <h1 class="brand-title"><i class="fa-solid fa-graduation-cap" style="margin-right: 12px; color: var(--accent-primary);"></i>EduTwin Core</h1>
+    <div class="page-wrapper">
+        <header class="site-header">
+            <a href="/" class="brand">EduTwin</a>
+            <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+                Academic Management System
+            </div>
         </header>
 
-        <div class="login-sections">
-            <!-- Student Login -->
-            <div class="glass-panel tilt-effect">
-                <h2><i class="fa-solid fa-user-graduate"></i> Student Access</h2>
-                <form action="/student_login" method="POST">
-                    <div class="form-group">
-                        <label for="roll_number"><i class="fa-solid fa-id-card"></i> Roll Number</label>
-                        <input type="text" id="roll_number" name="roll_number" required placeholder="Enter your registered Roll No">
-                    </div>
-                    <button type="submit" class="btn-primary">View Results <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
-                </form>
+        <main class="main-content">
+            <div style="max-width: 800px; margin-bottom: 4rem;" class="hero-text">
+                <h1 class="title-large">Welcome to <br><span style="color: var(--accent);">EduTwin Core.</span></h1>
+                <p class="subtitle">Secure authentication gateway for students and administrators. Access academic records, manage enrollments, and track progress with clarity.</p>
             </div>
 
-            <!-- Admin Login -->
-            <div class="glass-panel tilt-effect">
-                <h2><i class="fa-solid fa-shield-halved"></i> Admin Access</h2>
-                <form action="/admin_login" method="POST">
-                    <div class="form-group">
-                        <label for="username"><i class="fa-solid fa-user-tie"></i> Username</label>
-                        <input type="text" id="username" name="username" required placeholder="Administrator Account">
+            <div class="auth-grid">
+                <!-- Student Login -->
+                <div class="editorial-panel">
+                    <div class="panel-header">
+                        <h2 class="title-medium" style="font-size: 2rem;">Student Portal</h2>
                     </div>
-                    <div class="form-group">
-                        <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
-                        <input type="password" id="password" name="password" required placeholder="Secure Password">
+                    <form action="/student_login" method="POST">
+                        <div class="form-group">
+                            <label class="form-label" for="roll_number">Roll Number</label>
+                            <input class="form-input" type="text" id="roll_number" name="roll_number" required placeholder="Enter your unique ID">
+                        </div>
+                        <button type="submit" class="btn btn-primary">View Results</button>
+                    </form>
+                </div>
+
+                <!-- Admin Login -->
+                <div class="editorial-panel">
+                    <div class="panel-header">
+                        <h2 class="title-medium" style="font-size: 2rem;">Admin Portal</h2>
                     </div>
-                    <button type="submit" class="btn-primary">Authenticate <i class="fa-solid fa-fingerprint" style="margin-left: 8px;"></i></button>
-                </form>
+                    <form action="/admin_login" method="POST">
+                        <div class="form-group">
+                            <label class="form-label" for="username">Administrator ID</label>
+                            <input class="form-input" type="text" id="username" name="username" required placeholder="Your username">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password">Security Key</label>
+                            <input class="form-input" type="password" id="password" name="password" required placeholder="Your password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Authenticate</button>
+                    </form>
+                </div>
+                
+                <!-- Admin Registration -->
+                <div class="editorial-panel" style="background: var(--text-main); color: var(--bg-secondary);">
+                    <div class="panel-header" style="border-color: #333;">
+                        <h2 class="title-medium" style="font-size: 2rem; color: var(--bg-secondary);">System Setup</h2>
+                    </div>
+                    <form action="/admin_register" method="POST">
+                        <div class="form-group">
+                            <label class="form-label" for="reg_username" style="color: #999;">New Namespace</label>
+                            <input class="form-input" style="color: var(--bg-secondary); border-color: #444;" type="text" id="reg_username" name="username" required placeholder="Pick a username">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="reg_password" style="color: #999;">New Password</label>
+                            <input class="form-input" style="color: var(--bg-secondary); border-color: #444;" type="password" id="reg_password" name="password" required placeholder="Choose a password">
+                        </div>
+                        <button type="submit" class="btn" style="background: var(--bg-secondary); color: var(--text-main);">Register Admin</button>
+                    </form>
+                </div>
             </div>
-            
-            <!-- Admin Registration -->
-            <div class="glass-panel tilt-effect">
-                <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Admin Setup</h2>
-                <form action="/admin_register" method="POST">
-                    <div class="form-group">
-                        <label for="reg_username"><i class="fa-solid fa-server"></i> New Namespace</label>
-                        <input type="text" id="reg_username" name="username" required placeholder="Pick a secure username">
-                    </div>
-                    <div class="form-group">
-                        <label for="reg_password"><i class="fa-solid fa-key"></i> New Password</label>
-                        <input type="password" id="reg_password" name="password" required placeholder="Choose a secure password">
-                    </div>
-                    <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-tertiary), var(--accent-secondary));">Register System <i class="fa-solid fa-cloud-arrow-up" style="margin-left: 8px;"></i></button>
-                </form>
-            </div>
-        </div>
+        </main>
     </div>
     
     <script src="{{ url_for('static', filename='script.js') }}"></script>

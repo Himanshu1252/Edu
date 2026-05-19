@@ -3,17 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Result - EduTwin</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Academic Profile &mdash; EduTwin</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 </head>
 <body>
     
-    <div id="tsparticles"></div>
-
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div id="flash-data" style="display: none;">
@@ -26,79 +21,85 @@
         {% endif %}
     {% endwith %}
 
-    <div class="container">
-        <header>
-            <h1 class="brand-title"><i class="fa-solid fa-award" style="margin-right: 12px; color: var(--accent-secondary);"></i>Academic Result</h1>
-            <a href="/logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+    <div class="page-wrapper">
+        <header class="site-header">
+            <div style="display: flex; align-items: baseline; gap: 2rem;">
+                <a href="/" class="brand">EduTwin</a>
+                <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+                    Academic Transcript
+                </span>
+            </div>
+            <a href="/logout" class="btn-outline">Sign Out</a>
         </header>
 
-        <div class="admin-grid" style="grid-template-columns: 1fr; gap: 20px;">
+        <main class="main-content" style="max-width: 1000px;">
             
-            <!-- Student Header Info -->
-            <div class="glass-panel tilt-effect" style="border-left: 4px solid var(--accent-primary);">
-                <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; align-items: center;">
+            <div class="editorial-panel" style="margin-bottom: 3rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem;">
                     <div>
-                        <h2 style="margin-bottom: 5px;"><i class="fa-solid fa-circle-user" style="color: var(--text-primary); text-shadow: none;"></i> {{ student.name }}</h2>
-                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Candidate Verified Profile</span>
+                        <div class="form-label">Verified Scholar</div>
+                        <h1 class="title-large" style="margin-bottom: 0;">{{ student.name }}</h1>
                     </div>
                     <div style="text-align: right;">
-                        <div style="margin-bottom: 5px;"><strong style="color: var(--accent-secondary);"><i class="fa-solid fa-hashtag"></i> ID:</strong> {{ student.roll_number }}</div>
-                        <div><strong style="color: var(--accent-tertiary);"><i class="fa-solid fa-code-branch"></i> Department:</strong> {{ student.branch }}</div>
+                        <div style="font-size: 1.1rem; margin-bottom: 0.5rem;"><span style="color: var(--text-muted);">Department:</span> <strong>{{ student.branch }}</strong></div>
+                        <div style="font-size: 1.1rem;"><span style="color: var(--text-muted);">ID:</span> <strong style="font-family: monospace;">{{ student.roll_number }}</strong></div>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Aggregate Score</div>
+                        <div class="stat-value counter">{{ total }}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Percentage</div>
+                        <div class="stat-value counter">{{ percentage }}%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Standing</div>
+                        <div class="stat-value" style="color: {% if grade == 'F' %}var(--danger){% else %}var(--success){% endif %};">{{ grade }}</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Grade Breakdown -->
-            <div class="glass-panel tilt-effect">
-                <h2><i class="fa-solid fa-list-check"></i> Subject Assessment</h2>
-                <div class="table-container">
-                    <table>
-                        <thead>
+            <h2 class="title-medium" style="font-size: 2rem; margin-bottom: 2rem;">Course Assessments</h2>
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Subject Description</th>
+                            <th>Acquired Score</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if marks %}
+                            {% for mark in marks %}
                             <tr>
-                                <th>Subject Code / Name</th>
-                                <th>Score Acquired</th>
-                                <th>Max Score</th>
+                                <td style="font-weight: 600; font-size: 1.1rem;">{{ mark.subject }}</td>
+                                <td>
+                                    <span style="font-family: var(--font-serif); font-size: 1.8rem; font-weight: 600;">{{ mark.marks }}</span> 
+                                    <span style="color: var(--text-muted);">/ 100</span>
+                                </td>
+                                <td>
+                                    <span class="grade-indicator {% if mark.marks >= 50 %}grade-excellent{% else %}grade-fail{% endif %}">
+                                        {% if mark.marks >= 50 %}PASS{% else %}FAIL{% endif %}
+                                    </span>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% if marks %}
-                                {% for mark in marks %}
-                                <tr>
-                                    <td class="subject-cell">{{ mark.subject }}</td>
-                                    <td style="color: var(--text-primary); font-weight: 600;">{{ mark.marks }} <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.85rem;">/ 100</span></td>
-                                    <td style="color: var(--text-secondary);">PASS</td>
-                                </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td colspan="3" style="text-align: center; color: var(--text-secondary);">
-                                        <i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 10px; display: block; opacity: 0.5;"></i>
-                                        No assessment data recorded for this period.
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="3" style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
+                                    No assessment data recorded for this period.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
             </div>
 
-            <!-- Final Aggregate -->
-            <div class="glass-panel tilt-effect" style="background: rgba(255,255,255,0.02); display: flex; gap: 20px; flex-wrap: wrap;">
-                <div class="stat-box tilt-effect">
-                    <span style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase;"><i class="fa-solid fa-calculator"></i> Aggregate</span>
-                    <span class="stat-value counter">{{ total }}</span>
-                </div>
-                <div class="stat-box tilt-effect">
-                    <span style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase;"><i class="fa-solid fa-chart-pie"></i> Percentage</span>
-                    <span class="stat-value counter">{{ percentage }}%</span>
-                </div>
-                <div class="stat-box tilt-effect" style="border-color: var(--glass-border);">
-                    <span style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase;"><i class="fa-solid fa-ranking-star"></i> Standing</span>
-                    <span class="stat-value {% if grade == 'F' %}grade-fail{% else %}grade-excellent{% endif %}">{{ grade }}</span>
-                </div>
-            </div>
-
-        </div>
+        </main>
     </div>
     
     <script src="{{ url_for('static', filename='script.js') }}"></script>

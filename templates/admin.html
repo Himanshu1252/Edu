@@ -3,17 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - EduTwin</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Admin Dashboard &mdash; EduTwin</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 </head>
 <body>
     
-    <div id="tsparticles"></div>
-
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div id="flash-data" style="display: none;">
@@ -26,106 +21,128 @@
         {% endif %}
     {% endwith %}
 
-    <div class="container">
-        <header>
-            <h1 class="brand-title" style="text-transform: capitalize;"><i class="fa-solid fa-chart-line" style="margin-right: 12px; color: var(--accent-primary);"></i>{{ username }}'s Panel</h1>
-            <a href="/logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    <div class="page-wrapper">
+        <header class="site-header">
+            <div style="display: flex; align-items: baseline; gap: 2rem;">
+                <a href="/" class="brand">EduTwin</a>
+                <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-muted); text-transform: capitalize;">
+                    {{ username }}'s Overview
+                </span>
+            </div>
+            <a href="/logout" class="btn-outline">End Session</a>
         </header>
 
-        <div class="admin-grid">
-            <!-- Add Student Form -->
-            <div class="glass-panel tilt-effect">
-                <h2><i class="fa-solid fa-user-plus"></i> Enroll Student</h2>
-                <form action="/admin" method="POST">
-                    <input type="hidden" name="action" value="add_student">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" name="name" required placeholder="e.g. Jane Doe">
+        <main class="main-content">
+            
+            <div class="dashboard-grid">
+                <aside class="admin-sidebar">
+                    <!-- Add Student Form -->
+                    <div class="editorial-panel">
+                        <div class="panel-header">
+                            <h2 class="title-medium" style="font-size: 1.8rem;">Enrollment</h2>
+                        </div>
+                        <form action="/admin" method="POST">
+                            <input type="hidden" name="action" value="add_student">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input class="form-input" type="text" name="name" required placeholder="e.g. Jane Doe">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Roll Number</label>
+                                <input class="form-input" type="text" name="roll_number" required placeholder="Unique ID">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Branch/Major</label>
+                                <input class="form-input" type="text" name="branch" required placeholder="e.g. History">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Register Student</button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label>Roll Number</label>
-                        <input type="text" name="roll_number" required placeholder="Unique ID identifier">
-                    </div>
-                    <div class="form-group">
-                        <label>Branch/Major</label>
-                        <input type="text" name="branch" required placeholder="e.g. Computer Science">
-                    </div>
-                    <button type="submit" class="btn-primary">Register Student <i class="fa-solid fa-check" style="margin-left: 8px;"></i></button>
-                </form>
-            </div>
 
-            <!-- Add Marks Form -->
-            <div class="glass-panel tilt-effect">
-                <h2><i class="fa-solid fa-file-pen"></i> Record Academic Data</h2>
-                <form action="/admin" method="POST">
-                    <input type="hidden" name="action" value="add_marks">
-                    <div class="form-group">
-                        <label>Student Roll Number</label>
-                        <input type="text" name="roll_number" required placeholder="Target Roll Number">
+                    <!-- Add Marks Form -->
+                    <div class="editorial-panel">
+                        <div class="panel-header">
+                            <h2 class="title-medium" style="font-size: 1.8rem;">Academic Data</h2>
+                        </div>
+                        <form action="/admin" method="POST">
+                            <input type="hidden" name="action" value="add_marks">
+                            <div class="form-group">
+                                <label class="form-label">Target Roll Number</label>
+                                <input class="form-input" type="text" name="roll_number" required placeholder="Student ID">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Subject</label>
+                                <input class="form-input" type="text" name="subject" required placeholder="Course Title">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Marks Obtained</label>
+                                <input class="form-input" type="number" name="marks" min="0" max="100" required placeholder="0-100">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="background: var(--accent);">Submit Grade</button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label>Subject</label>
-                        <input type="text" name="subject" required placeholder="e.g. Advanced Mathematics">
-                    </div>
-                    <div class="form-group">
-                        <label>Marks Obtained (0-100)</label>
-                        <input type="number" name="marks" min="0" max="100" required placeholder="Input Final Score">
-                    </div>
-                    <button type="submit" class="btn-primary">Submit Grade <i class="fa-solid fa-upload" style="margin-left: 8px;"></i></button>
-                </form>
-            </div>
-        </div>
+                </aside>
 
-        <div class="glass-panel tilt-effect" style="width: 100%;">
-            <h2><i class="fa-solid fa-users-viewfinder"></i> Student Roster & Metrics</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Roll Number</th>
-                            <th>Name</th>
-                            <th>Branch</th>
-                            <th>Subject</th>
-                            <th>Marks</th>
-                            <th>Total Marks</th>
-                            <th>Percentage</th>
-                            <th>Grade</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if students %}
-                            {% for student in students %}
-                            <tr>
-                                <td style="font-weight: 500; color: var(--accent-primary);">{{ student.roll_number }}</td>
-                                <td>{{ student.name }}</td>
-                                <td>{{ student.branch }}</td>
-                                <td>{{ student.subject }}</td>
-                                <td>{{ student.marks }}</td>
-                                <td>{{ student.total }}</td>
-                                <td>{{ student.percentage }}%</td>
-                                <td><strong class="{% if student.grade == 'F' %}grade-fail{% else %}grade-excellent{% endif %}">{{ student.grade }}</strong></td>
-                                <td>
-                                    <form action="/admin" method="POST" style="display:inline;">
-                                        <input type="hidden" name="action" value="delete_student">
-                                        <input type="hidden" name="roll_number" value="{{ student.roll_number }}">
-                                        <button type="submit" class="btn-danger"><i class="fa-solid fa-trash-can"></i> Revoke</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="9" style="text-align: center; color: var(--text-secondary);">
-                                    <i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 10px; display: block; opacity: 0.5;"></i>
-                                    No student records available in the database.
-                                </td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
+                <section class="admin-main">
+                    <div style="margin-bottom: 2rem;">
+                        <h2 class="title-medium">Student Roster</h2>
+                        <p class="subtitle">Complete academic records and performance metrics for all registered students.</p>
+                    </div>
+                    
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Record</th>
+                                    <th>Subject & Score</th>
+                                    <th>Aggregate</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if students %}
+                                    {% for student in students %}
+                                    <tr>
+                                        <td>
+                                            <div style="font-weight: 600;">{{ student.name }}</div>
+                                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">{{ student.branch }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="font-family: monospace; font-size: 0.9rem; background: #F0F0F0; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block;">{{ student.roll_number }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 500;">{{ student.subject }}</div>
+                                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">{{ student.marks }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 600;">{{ student.percentage }}%</div>
+                                            <div style="margin-top: 0.4rem;">
+                                                <span class="grade-indicator {% if student.grade == 'F' %}grade-fail{% else %}grade-excellent{% endif %}">{{ student.grade }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <form action="/admin" method="POST">
+                                                <input type="hidden" name="action" value="delete_student">
+                                                <input type="hidden" name="roll_number" value="{{ student.roll_number }}">
+                                                <button type="submit" class="btn-danger">Revoke</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
+                                            No student records available in the database.
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
             </div>
-        </div>
+        </main>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
