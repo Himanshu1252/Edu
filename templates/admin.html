@@ -17,11 +17,7 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div id="flash-data" style="display: none;">
-                [
-                {% for category, message in messages %}
-                    {"category": "{{ category }}", "message": "{{ message }}"}{{ "," if not loop.last else "" }}
-                {% endfor %}
-                ]
+                {{ messages | tojson }}
             </div>
         {% endif %}
     {% endwith %}
