@@ -34,53 +34,82 @@
     {% endwith %}
 
     <div class="container">
-        <header>
-            <h1 class="brand-title"><i class="fa-solid fa-graduation-cap" style="margin-right: 12px; color: var(--accent-primary);"></i>EduTwin Core</h1>
+        <!-- Enhanced Header with Hero Section -->
+        <header class="hero-header">
+            <div class="header-content">
+                <h1 class="brand-title"><i class="fa-solid fa-graduation-cap" style="margin-right: 12px; color: var(--accent-primary);"></i>EduTwin Core</h1>
+                <p class="tagline">Secure Academic Result Management System</p>
+            </div>
+            <div class="header-decoration">
+                <div class="decoration-circle circle-1"></div>
+                <div class="decoration-circle circle-2"></div>
+            </div>
         </header>
 
         <div class="login-sections">
             <!-- Student Login -->
-            <div class="glass-panel tilt-effect">
+            <div class="glass-panel tilt-effect login-card" data-card-type="student">
                 <h2><i class="fa-solid fa-user-graduate"></i> Student Access</h2>
-                <form action="/student_login" method="POST">
+                <p class="card-description">Enter your roll number to view your academic results</p>
+                <form action="/student_login" method="POST" class="login-form">
                     <div class="form-group">
                         <label for="roll_number"><i class="fa-solid fa-id-card"></i> Roll Number</label>
-                        <input type="text" id="roll_number" name="roll_number" required placeholder="Enter your registered Roll No">
+                        <input type="text" id="roll_number" name="roll_number" required placeholder="Enter your registered Roll No" class="input-field">
+                        <span class="input-error" style="display: none;">Please enter a valid roll number</span>
                     </div>
-                    <button type="submit" class="btn-primary">View Results <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+                    <button type="submit" class="btn-primary" data-ripple="true">View Results <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
                 </form>
+                <div class="card-footer">
+                    <small>First time? Contact your administrator</small>
+                </div>
             </div>
 
             <!-- Admin Login -->
-            <div class="glass-panel tilt-effect">
+            <div class="glass-panel tilt-effect login-card" data-card-type="admin">
                 <h2><i class="fa-solid fa-shield-halved"></i> Admin Access</h2>
-                <form action="/admin_login" method="POST">
+                <p class="card-description">Secure administrator panel for managing student records</p>
+                <form action="/admin_login" method="POST" class="login-form">
                     <div class="form-group">
                         <label for="username"><i class="fa-solid fa-user-tie"></i> Username</label>
-                        <input type="text" id="username" name="username" required placeholder="Administrator Account">
+                        <input type="text" id="username" name="username" required placeholder="Administrator Account" class="input-field">
+                        <span class="input-error" style="display: none;">Username is required</span>
                     </div>
                     <div class="form-group">
                         <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
-                        <input type="password" id="password" name="password" required placeholder="Secure Password">
+                        <input type="password" id="password" name="password" required placeholder="Secure Password" class="input-field">
+                        <span class="input-error" style="display: none;">Password is required</span>
                     </div>
-                    <button type="submit" class="btn-primary">Authenticate <i class="fa-solid fa-fingerprint" style="margin-left: 8px;"></i></button>
+                    <button type="submit" class="btn-primary" data-ripple="true">Authenticate <i class="fa-solid fa-fingerprint" style="margin-left: 8px;"></i></button>
                 </form>
+                <div class="card-footer">
+                    <small>Authorized administrators only</small>
+                </div>
             </div>
             
             <!-- Admin Registration -->
-            <div class="glass-panel tilt-effect">
+            <div class="glass-panel tilt-effect login-card" data-card-type="register">
                 <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Admin Setup</h2>
-                <form action="/admin_register" method="POST">
+                <p class="card-description">Create a new administrator account for system management</p>
+                <form action="/admin_register" method="POST" class="login-form">
                     <div class="form-group">
                         <label for="reg_username"><i class="fa-solid fa-server"></i> New Namespace</label>
-                        <input type="text" id="reg_username" name="username" required placeholder="Pick a secure username">
+                        <input type="text" id="reg_username" name="username" required placeholder="Pick a secure username" class="input-field">
+                        <span class="input-error" style="display: none;">Username must be at least 3 characters</span>
                     </div>
                     <div class="form-group">
                         <label for="reg_password"><i class="fa-solid fa-key"></i> New Password</label>
-                        <input type="password" id="reg_password" name="password" required placeholder="Choose a secure password">
+                        <input type="password" id="reg_password" name="password" required placeholder="Choose a secure password" class="input-field">
+                        <span class="input-error" style="display: none;">Password must be at least 6 characters</span>
                     </div>
-                    <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-tertiary), var(--accent-secondary));">Register System <i class="fa-solid fa-cloud-arrow-up" style="margin-left: 8px;"></i></button>
+                    <div class="password-strength" style="display: none;">
+                        <div class="strength-bar"><div class="strength-progress"></div></div>
+                        <small id="strength-text">Password strength: Weak</small>
+                    </div>
+                    <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-tertiary), var(--accent-secondary));" data-ripple="true">Register System <i class="fa-solid fa-cloud-arrow-up" style="margin-left: 8px;"></i></button>
                 </form>
+                <div class="card-footer">
+                    <small>Requires secure credentials</small>
+                </div>
             </div>
         </div>
     </div>

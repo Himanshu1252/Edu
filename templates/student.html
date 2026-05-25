@@ -27,30 +27,54 @@
     {% endwith %}
 
     <div class="container">
-        <header>
-            <h1 class="brand-title"><i class="fa-solid fa-award" style="margin-right: 12px; color: var(--accent-secondary);"></i>Academic Result</h1>
+        <header class="student-header">
+            <div class="header-content">
+                <h1 class="brand-title"><i class="fa-solid fa-award" style="margin-right: 12px; color: var(--accent-secondary);"></i>Academic Result</h1>
+                <p class="header-subtitle">Verified Academic Performance Report</p>
+            </div>
             <a href="/logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
         </header>
 
         <div class="admin-grid" style="grid-template-columns: 1fr; gap: 20px;">
             
             <!-- Student Header Info -->
-            <div class="glass-panel tilt-effect" style="border-left: 4px solid var(--accent-primary);">
-                <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; align-items: center;">
-                    <div>
-                        <h2 style="margin-bottom: 5px;"><i class="fa-solid fa-circle-user" style="color: var(--text-primary); text-shadow: none;"></i> {{ student.name }}</h2>
-                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Candidate Verified Profile</span>
+            <div class="glass-panel tilt-effect profile-header" style="border-left: 4px solid var(--accent-primary);">
+                <div class="profile-content">
+                    <div class="profile-left">
+                        <div class="profile-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h2 style="margin-bottom: 5px;"><i class="fa-solid fa-circle-user" style="color: var(--text-primary); text-shadow: none;"></i> {{ student.name }}</h2>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Candidate Verified Profile</span>
+                        </div>
                     </div>
-                    <div style="text-align: right;">
-                        <div style="margin-bottom: 5px;"><strong style="color: var(--accent-secondary);"><i class="fa-solid fa-hashtag"></i> ID:</strong> {{ student.roll_number }}</div>
-                        <div><strong style="color: var(--accent-tertiary);"><i class="fa-solid fa-code-branch"></i> Department:</strong> {{ student.branch }}</div>
+                    <div class="profile-right">
+                        <div class="info-badge">
+                            <strong style="color: var(--accent-secondary);"><i class="fa-solid fa-hashtag"></i> ID:</strong> 
+                            <span>{{ student.roll_number }}</span>
+                        </div>
+                        <div class="info-badge">
+                            <strong style="color: var(--accent-tertiary);"><i class="fa-solid fa-code-branch"></i> Department:</strong> 
+                            <span>{{ student.branch }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Grade Breakdown -->
-            <div class="glass-panel tilt-effect">
+            <div class="glass-panel tilt-effect result-section">
                 <h2><i class="fa-solid fa-list-check"></i> Subject Assessment</h2>
+                <div class="results-summary">
+                    <div class="summary-item">
+                        <span>Total Subjects:</span>
+                        <strong id="total-subjects">0</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Average Score:</span>
+                        <strong id="avg-score">0</strong>
+                    </div>
+                </div>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -83,19 +107,55 @@
             </div>
 
             <!-- Final Aggregate -->
-            <div class="glass-panel tilt-effect" style="background: rgba(255,255,255,0.02); display: flex; gap: 20px; flex-wrap: wrap;">
-                <div class="stat-box tilt-effect">
-                    <span style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase;"><i class="fa-solid fa-calculator"></i> Aggregate</span>
-                    <span class="stat-value counter">{{ total }}</span>
+            <div class="glass-panel tilt-effect aggregate-section" style="background: rgba(255,255,255,0.02);">
+                <h2 style="margin-bottom: 25px;"><i class="fa-solid fa-chart-line"></i> Final Assessment</h2>
+                <div class="aggregate-cards">
+                    <div class="stat-box tilt-effect aggregate-card">
+                        <div class="card-header">
+                            <i class="fa-solid fa-calculator"></i>
+                            <span>Aggregate Score</span>
+                        </div>
+                        <span class="stat-value counter">{{ total }}</span>
+                        <div class="card-footer">Out of 100</div>
+                    </div>
+                    <div class="stat-box tilt-effect aggregate-card">
+                        <div class="card-header">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            <span>Percentage Score</span>
+                        </div>
+                        <span class="stat-value counter">{{ percentage }}%</span>
+                        <div class="card-footer">Overall performance</div>
+                    </div>
+                    <div class="stat-box tilt-effect aggregate-card" style="border-color: var(--glass-border);">
+                        <div class="card-header">
+                            <i class="fa-solid fa-ranking-star"></i>
+                            <span>Academic Standing</span>
+                        </div>
+                        <span class="stat-value {% if grade == 'F' %}grade-fail{% else %}grade-excellent{% endif %}">{{ grade }}</span>
+                        <div class="card-footer" id="grade-label">Academic grade</div>
+                    </div>
                 </div>
-                <div class="stat-box tilt-effect">
-                    <span style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase;"><i class="fa-solid fa-chart-pie"></i> Percentage</span>
-                    <span class="stat-value counter">{{ percentage }}%</span>
+                <div class="performance-bar" style="margin-top: 30px;">
+                    <div class="bar-label">Performance Level</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ percentage }}%;"></div>
+                    </div>
+                    <div class="bar-values">
+                        <span>0%</span>
+                        <span id="current-percentage">{{ percentage }}%</span>
+                        <span>100%</span>
+                    </div>
                 </div>
-                <div class="stat-box tilt-effect" style="border-color: var(--glass-border);">
-                    <span style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase;"><i class="fa-solid fa-ranking-star"></i> Standing</span>
-                    <span class="stat-value {% if grade == 'F' %}grade-fail{% else %}grade-excellent{% endif %}">{{ grade }}</span>
-                </div>
+            </div>
+            
+            <!-- Export Section -->
+            <div class="glass-panel tilt-effect" style="text-align: center;">
+                <button class="btn-primary" id="print-results" data-ripple="true" style="width: auto; padding: 12px 30px;">
+                    <i class="fa-solid fa-print"></i> Print Results
+                </button>
+                <button class="btn-primary" id="download-results" data-ripple="true" style="width: auto; padding: 12px 30px; margin-left: 10px; background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));">
+                    <i class="fa-solid fa-download"></i> Download PDF
+                </button>
             </div>
 
         </div>
