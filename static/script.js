@@ -181,3 +181,17 @@ function showToast(category, message) {
         setTimeout(() => toast.remove(), 5000);
     }
 }
+
+const themeBtn = document.getElementById("themeToggle");
+
+themeBtn.addEventListener("click", () => {
+
+    document.body.classList.toggle("light-mode");
+
+    if(document.body.classList.contains("light-mode")){
+        themeBtn.innerText = "🌙";
+    } else {
+        themeBtn.innerText = "☀️";
+    }
+
+});

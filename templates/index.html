@@ -9,7 +9,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <!-- GSAP Animation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <!-- tsParticles Engine -->
@@ -35,8 +35,17 @@
 
     <div class="container">
         <header>
-            <h1 class="brand-title"><i class="fa-solid fa-graduation-cap" style="margin-right: 12px; color: var(--accent-primary);"></i>EduTwin Core</h1>
-        </header>
+    <h1 class="brand-title">
+        <i class="fa-solid fa-graduation-cap" 
+           style="margin-right: 12px; color: var(--accent-primary);">
+        </i>
+        EduTwin Core
+    </h1>
+
+    <button id="themeToggle" class="theme-btn">
+        🌙
+    </button>
+</header>
 
         <div class="login-sections">
             <!-- Student Login -->

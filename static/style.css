@@ -329,3 +329,68 @@ tbody tr:hover {
   .stat-box { min-width: 100%; margin-bottom: 15px; }
   .glass-panel { padding: 20px; }
 }
+
+/* HEADER */
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* THEME BUTTON */
+
+.theme-btn{
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    background: linear-gradient(135deg, #6c63ff, #8b5cf6);
+    color: white;
+   
+}
+
+/* LIGHT MODE */
+
+body.light-mode{
+    background: #f4f4f4 !important;
+    color: black !important;
+}
+
+/* hide particles in light mode */
+
+body.light-mode #tsparticles{
+    display: none;
+}
+
+/* cards */
+
+body.light-mode .glass-panel{
+    background: rgba(255,255,255,0.95) !important;
+    color: black !important;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* headings and labels */
+
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode label{
+    color: black !important;
+}
+
+/* inputs */
+
+body.light-mode input{
+    background: white !important;
+    color: black !important;
+    border: 1px solid #999 !important;
+}
+
+/* placeholders */
+
+body.light-mode input::placeholder{
+    color: #666 !important;
+}
