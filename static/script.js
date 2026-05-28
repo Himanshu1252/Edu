@@ -33,14 +33,16 @@ document.addEventListener('DOMContentLoaded', () => {
             ease: "circ.out",
             delay: 0.1
         });
-        gsap.from("tbody tr", {
-            x: -30,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.08,
-            ease: "power2.out",
-            delay: 0.5
-        });
+        if (document.querySelector("tbody tr")) {
+    gsap.from("tbody tr", {
+        x: -30,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "power2.out",
+        delay: 0.5
+    });
+}
     }
 
     // --- 3. Custom 3D Extreme Tilt Effect ---
@@ -181,3 +183,33 @@ function showToast(category, message) {
         setTimeout(() => toast.remove(), 5000);
     }
 }
+// =========================
+// Theme Toggle Logic gsap.from("tbody
+// =========================
+
+const themeToggle = document.getElementById("theme-toggle");
+const themeIcon = themeToggle.querySelector("i");
+
+// Load saved theme
+if (localStorage.getItem("theme") === "light") {
+    document.body.classList.add("light-mode");
+    themeIcon.classList.remove("fa-moon");
+    themeIcon.classList.add("fa-sun");
+}
+
+// Toggle theme
+themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("light-mode");
+
+    const isLight = document.body.classList.contains("light-mode");
+
+    if (isLight) {
+        localStorage.setItem("theme", "light");
+        themeIcon.classList.remove("fa-moon");
+        themeIcon.classList.add("fa-sun");
+    } else {
+        localStorage.setItem("theme", "dark");
+        themeIcon.classList.remove("fa-sun");
+        themeIcon.classList.add("fa-moon");
+    }
+});
