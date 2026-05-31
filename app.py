@@ -162,6 +162,7 @@ def admin():
                 flash('This Roll Number already exists in your records!', 'error')
                 
         # Action 2: Add marks ONLY (Does not touch student table!)
+        # Action 2: Add marks ONLY (With dynamic branch verification!)
         elif action == 'add_marks':
             roll_number = request.form['roll_number'].strip()
             subject = request.form['subject'].strip()
@@ -174,31 +175,46 @@ def admin():
             if marks < 0 or marks > 100:
                 flash('Marks must be legitimately between 0 and 100', 'error')
             else:
-                # Validation Step B: Verify student exists
-                student_exists = conn.execute(
-                    'SELECT 1 FROM students WHERE roll_number = ? AND admin_id = ?', 
+                # Validation Step B: Verify student exists AND fetch their true profile branch
+                student_profile = conn.execute(
+                    'SELECT branch FROM students WHERE roll_number = ? AND admin_id = ?', 
                     (roll_number, admin_id)
                 ).fetchone()
                 
-                if not student_exists:
+                if not student_profile:
                     flash('A student with this roll number does not exist in your records.', 'error')
                 else:
-                    # Validation Step C: Explicit Duplicate Subject Check
-                    subject_exists = conn.execute(
-                        'SELECT 1 FROM marks WHERE roll_number = ? AND subject = ? AND admin_id = ?',
-                        (roll_number, subject, admin_id)
-                    ).fetchone()
+                    # NEW Rule Map matching your updated JavaScript subjects precisely
+                    allowed_rules = {
+                        "Computer": ["JAVA", "AOA", "DBMS", "IOT", "Operating Sys."],
+                        "Science": ["Physics", "Chemistry", "Maths"],
+                        "Humanities": ["English", "History", "Geography", "Business Development"]
+                    }
                     
-                    if subject_exists:
-                        flash('Subject already added for this student', 'error')
+                    # Read the student's true registered branch from the database column
+                    student_true_branch = student_profile['branch']
+                    allowed_subjects = allowed_rules.get(student_true_branch, [])
+                    
+                    # Security Check: If teacher selects a subject not belonging to the student's true branch
+                    if subject not in allowed_subjects:
+                        flash(f"Mismatched Data! Student {roll_number} belongs to '{student_true_branch}' and cannot be graded in '{subject}'.", "error")
                     else:
-                        conn.execute(
-                            'INSERT INTO marks (roll_number, subject, marks, admin_id) VALUES (?, ?, ?, ?)', 
-                            (roll_number, subject, marks, admin_id)
-                        )
-                        conn.commit()
-                        flash(f'Marks added successfully to {subject}!', 'success')
-                
+                        # Validation Step C: Explicit Duplicate Subject Check
+                        subject_exists = conn.execute(
+                            'SELECT 1 FROM marks WHERE roll_number = ? AND subject = ? AND admin_id = ?',
+                            (roll_number, subject, admin_id)
+                        ).fetchone()
+                        
+                        if subject_exists:
+                            flash('Subject already added for this student', 'error')
+                        else:
+                            conn.execute(
+                                'INSERT INTO marks (roll_number, subject, marks, admin_id) VALUES (?, ?, ?, ?)', 
+                                (roll_number, subject, marks, admin_id)
+                            )
+                            conn.commit()
+                            flash(f'Marks added successfully to {subject}!', 'success')
+
         elif action == 'delete_student':
             roll_number = request.form['roll_number']
             conn.execute('DELETE FROM marks WHERE roll_number = ? AND admin_id = ?', (roll_number, admin_id))

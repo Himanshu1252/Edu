@@ -1,10 +1,46 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    // --- 1. Client-Side Validation ---
+    // --- 1. Dynamic Branch-to-Subject Filter Mapping ---
+    // Note: The keys here must EXACTLY match the option values in your HTML dropdowns
+    const subjectsByBranch = {
+        "Computer": ["JAVA", "AOA", "DBMS", "IOT", "Operating Sys."],
+        "Science": ["Physics", "Chemistry", "Maths"],
+        "Humanities": ["English", "History", "Geography", "Business Development"]
+    };
+
+    const branchSelect = document.getElementById("branch-select");
+    const subjectSelect = document.getElementById("subject-select");
+
+    // Defensive check: Only run dropdown filter logic if elements exist on the page
+    if (branchSelect && subjectSelect) {
+        branchSelect.addEventListener("change", function () {
+            const selectedBranch = this.value;
+            const subjects = subjectsByBranch[selectedBranch] || [];
+
+            // Reset options container back to premium default placeholder state
+            subjectSelect.innerHTML = '<option value="" disabled selected hidden style="background: #1e1e24; color: #ffffff;">Select a Subject</option>';
+
+            // Generate and inject new localized items dynamically
+            subjects.forEach(subject => {
+                const option = document.createElement("option");
+                option.value = subject;
+                option.textContent = subject;
+                
+                // Keep premium dark styling clean across system environments
+                option.style.background = "#1e1e24";
+                option.style.color = "#ffffff";
+                
+                subjectSelect.appendChild(option);
+            });
+        });
+    }
+
+    // --- 2. Client-Side Integrity Validations ---
     const marksInputs = document.querySelectorAll('input[name="marks"]');
     marksInputs.forEach(input => {
         input.addEventListener('change', function() {
-            let value = parseInt(this.value);
+            let value = parseInt(this.value, 10);
+            if (isNaN(value)) return;
             if (value < 0) this.value = 0;
             if (value > 100) this.value = 100;
         });
@@ -22,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 2. GSAP Entry Animations ---
+    // --- 3. GSAP Structural UI Animations ---
     if (typeof gsap !== "undefined") {
         gsap.from("header", { y: -40, opacity: 0, duration: 1, ease: "power4.out" });
         gsap.from(".glass-panel", { 
@@ -43,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 3. Custom 3D Extreme Tilt Effect ---
+    // --- 4. Custom 3D Card Hover Inertia (Tilt) ---
     const tiltElements = document.querySelectorAll('.tilt-effect');
     tiltElements.forEach(el => {
         el.addEventListener('mousemove', (e) => {
@@ -54,13 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const xPct = (x / rect.width - 0.5) * 2;
             const yPct = (y / rect.height - 0.5) * 2;
             
-            const maxTiltX = 8; // deeper rotation
+            const maxTiltX = 8; 
             const maxTiltY = 8;
 
-            const rotateX =  maxTiltY * yPct * -1;
+            const rotateX = maxTiltY * yPct * -1;
             const rotateY = maxTiltX * xPct;
 
-            // EXTREME Hover lift & glow while tilted
             el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale3d(1.02, 1.02, 1.02)`;
             el.style.boxShadow = `0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(99, 102, 241, 0.3)`;
             el.style.borderColor = `rgba(255, 255, 255, 0.2)`;
@@ -78,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 4. Ripple Effects ---
+    // --- 5. Button Ripple Engine ---
     const ripples = document.querySelectorAll('.btn-primary, .btn-danger');
     ripples.forEach(btn => {
         btn.addEventListener('mousedown', function (e) {
@@ -91,22 +126,20 @@ document.addEventListener('DOMContentLoaded', () => {
             ripple.style.top = y + 'px';
             this.appendChild(ripple);
             
-            setTimeout(() => ripple.remove(), 400); // clear span
+            setTimeout(() => ripple.remove(), 400); 
         });
     });
 
-    // --- 5. Animated Counters ---
+    // --- 6. Stats Counter Micro-Animations ---
     const counters = document.querySelectorAll('.counter');
     counters.forEach(counter => {
         const targetText = counter.innerText.trim();
-        // If it contains a slash (like 286/300), don't animate it to avoid breaking the format
         if (targetText.includes('/')) return;
         
         const targetValue = parseFloat(targetText);
         if(isNaN(targetValue)) return;
         
         const isPercent = targetText.includes('%');
-        
         const duration = 1500; 
         const frames = 60;
         const increment = targetValue / (duration / (1000/frames));
@@ -126,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000/frames);
     });
 
-    // --- 6. TS Particles (Futuristic Network) ---
+    // --- 7. TS Particles Background Node Network ---
     if (typeof tsParticles !== "undefined") {
         tsParticles.load("tsparticles", {
             background: { color: { value: "transparent" } },
@@ -148,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 7. Toast Receiver ---
+    // --- 8. Backend Flask Toast Notifications ---
     const flashDataElement = document.getElementById('flash-data');
     if (flashDataElement) {
         try {
@@ -157,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => showToast(flash.category, flash.message), index * 300);
             });
         } catch (e) {
-            console.error(e);
+            console.error("Flash parsing error:", e);
         }
     }
 });
