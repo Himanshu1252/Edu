@@ -160,6 +160,24 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(e);
         }
     }
+    // --- 8. Password Toggle ---
+const toggleIcons = document.querySelectorAll('.toggle-password');
+
+toggleIcons.forEach(icon => {
+    icon.addEventListener('click', () => {
+        const wrapper = icon.closest('.password-wrapper');
+        const input = wrapper.querySelector('input');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    });
+});
+
 });
 
 function showToast(category, message) {

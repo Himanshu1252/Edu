@@ -329,3 +329,24 @@ tbody tr:hover {
   .stat-box { min-width: 100%; margin-bottom: 15px; }
   .glass-panel { padding: 20px; }
 }
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 45px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+  color: var(--accent-primary);
+}

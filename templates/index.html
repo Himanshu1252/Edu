@@ -55,14 +55,14 @@
             <div class="glass-panel tilt-effect">
                 <h2><i class="fa-solid fa-shield-halved"></i> Admin Access</h2>
                 <form action="/admin_login" method="POST">
-                    <div class="form-group">
-                        <label for="username"><i class="fa-solid fa-user-tie"></i> Username</label>
-                        <input type="text" id="username" name="username" required placeholder="Administrator Account">
-                    </div>
-                    <div class="form-group">
-                        <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
-                        <input type="password" id="password" name="password" required placeholder="Secure Password">
-                    </div>
+                    
+               <div class="form-group">
+                    <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+                     <div class="password-wrapper">
+                      <input type="password" id="password" name="password" required placeholder="Secure Password">
+                      <i class="fa-solid fa-eye toggle-password"></i>
+                    </div>     
+                </div>
                     <button type="submit" class="btn-primary">Authenticate <i class="fa-solid fa-fingerprint" style="margin-left: 8px;"></i></button>
                 </form>
             </div>
@@ -75,10 +75,13 @@
                         <label for="reg_username"><i class="fa-solid fa-server"></i> New Namespace</label>
                         <input type="text" id="reg_username" name="username" required placeholder="Pick a secure username">
                     </div>
-                    <div class="form-group">
-                        <label for="reg_password"><i class="fa-solid fa-key"></i> New Password</label>
-                        <input type="password" id="reg_password" name="password" required placeholder="Choose a secure password">
-                    </div>
+                <div class="form-group">
+                      <label for="reg_password"><i class="fa-solid fa-key"></i> New Password</label>
+                   <div class="password-wrapper">
+                      <input type="password" id="reg_password" name="password" required placeholder="Choose a secure password">
+                      <i class="fa-solid fa-eye toggle-password"></i>
+                  </div>
+                </div>
                     <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-tertiary), var(--accent-secondary));">Register System <i class="fa-solid fa-cloud-arrow-up" style="margin-left: 8px;"></i></button>
                 </form>
             </div>
