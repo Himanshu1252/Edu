@@ -31,3 +31,25 @@ A beginner-friendly, fully functional web application for managing student resul
 4. **Default Admin Login**
    - Username: `admin`
    - Password: `admin`
+
+
+   ## 📁 Project Structure
+   Edu/
+├── static/          # CSS, JS, images
+├── templates/       # HTML templates
+├── app.py           # Main Flask application
+├── database.db      # SQLite database
+├── requirements.txt # Dependencies
+└── README.md
+## 🤝 Contributing
+1. Fork the repository
+2. Create new branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m 'feat: add feature'`
+4. Push: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+## 📄 License
+This project is licensed under the MIT License.
+
+---
+⭐ Star this repo if you found it helpful!
