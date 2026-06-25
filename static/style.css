@@ -94,6 +94,7 @@ h2 i {
   box-shadow: var(--glass-shadow);
   border-radius: 16px;
   padding: 30px;
+  overflow: hidden;
   /* Smooth transition for when JS tilt isn't active or for general properties */
   transition: box-shadow 0.4s ease, border-color 0.4s ease;
   transform-style: preserve-3d;
@@ -247,8 +248,10 @@ input:focus {
 
 /* Table Design */
 .table-container {
-  overflow-x: visible;
+  overflow-x: auto;
   margin-top: 10px;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 table {
   width: 100%;
@@ -346,6 +349,18 @@ tbody tr:hover {
   .admin-grid { grid-template-columns: 1fr; }
   .stat-box { min-width: 100%; margin-bottom: 15px; }
   .glass-panel { padding: 20px; }
+
+  /* Responsive table: scroll horizontally inside the card */
+  table {
+    min-width: 700px;
+  }
+  th, td {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+  td:first-child {
+    min-width: auto;
+  }
 }
 
  /* Navbar Container */

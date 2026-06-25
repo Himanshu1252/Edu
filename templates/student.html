@@ -58,6 +58,7 @@
                                 <th>Subject Code / Name</th>
                                 <th>Score Acquired</th>
                                 <th>Max Score</th>
+                                <th>Result</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,12 +67,15 @@
                                 <tr>
                                     <td class="subject-cell">{{ mark.subject }}</td>
                                     <td style="color: var(--text-primary); font-weight: 600;">{{ mark.marks }} <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.85rem;">/ 100</span></td>
-                                    <td style="color: var(--text-secondary);">PASS</td>
+                                    <td style="color: var(--text-secondary);">100</td>
+                                    <td class="{% if mark.marks >= 40 %}grade-excellent{% else %}grade-fail{% endif %}" style="font-weight: 600;">
+                                        {% if mark.marks >= 40 %}PASS{% else %}FAIL{% endif %}
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             {% else %}
                                 <tr>
-                                    <td colspan="3" style="text-align: center; color: var(--text-secondary);">
+                                    <td colspan="4" style="text-align: center; color: var(--text-secondary);">
                                         <i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 10px; display: block; opacity: 0.5;"></i>
                                         No assessment data recorded for this period.
                                     </td>
