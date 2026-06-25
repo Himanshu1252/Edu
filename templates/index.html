@@ -4,87 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduTwin - Accelerate Your Results</title>
-    <!-- Modern Font -->
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- GSAP Animation Library -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <!-- tsParticles Engine -->
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 </head>
+
 <body>
-    
-    <!-- Futuristic Network Background -->
-    <div id="tsparticles"></div>
 
-    <!-- Hidden div to pass flash messages to JS -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div id="flash-data" style="display: none;">
-                [
-                {% for category, message in messages %}
-                    {"category": "{{ category }}", "message": "{{ message }}"}{{ "," if not loop.last else "" }}
-                {% endfor %}
-                ]
-            </div>
-        {% endif %}
-    {% endwith %}
+<div id="tsparticles"></div>
 
-    <div class="container">
-        <header>
-            <h1 class="brand-title"><i class="fa-solid fa-graduation-cap" style="margin-right: 12px; color: var(--accent-primary);"></i>EduTwin Core</h1>
-        </header>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div id="flash-data" style="display: none;">
+[
+{% for category, message in messages %}
+{"category": "{{ category }}", "message": "{{ message }}"}{{ "," if not loop.last else "" }}
+{% endfor %}
+]
+</div>
+{% endif %}
+{% endwith %}
 
-        <div class="login-sections">
-            <!-- Student Login -->
-            <div class="glass-panel tilt-effect">
-                <h2><i class="fa-solid fa-user-graduate"></i> Student Access</h2>
-                <form action="/student_login" method="POST">
-                    <div class="form-group">
-                        <label for="roll_number"><i class="fa-solid fa-id-card"></i> Roll Number</label>
-                        <input type="text" id="roll_number" name="roll_number" required placeholder="Enter your registered Roll No">
-                    </div>
-                    <button type="submit" class="btn-primary">View Results <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
-                </form>
-            </div>
+<div class="container">
 
-            <!-- Admin Login -->
-            <div class="glass-panel tilt-effect">
-                <h2><i class="fa-solid fa-shield-halved"></i> Admin Access</h2>
-                <form action="/admin_login" method="POST">
-                    <div class="form-group">
-                        <label for="username"><i class="fa-solid fa-user-tie"></i> Username</label>
-                        <input type="text" id="username" name="username" required placeholder="Administrator Account">
-                    </div>
-                    <div class="form-group">
-                        <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
-                        <input type="password" id="password" name="password" required placeholder="Secure Password">
-                    </div>
-                    <button type="submit" class="btn-primary">Authenticate <i class="fa-solid fa-fingerprint" style="margin-left: 8px;"></i></button>
-                </form>
-            </div>
-            
-            <!-- Admin Registration -->
-            <div class="glass-panel tilt-effect">
-                <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Admin Setup</h2>
-                <form action="/admin_register" method="POST">
-                    <div class="form-group">
-                        <label for="reg_username"><i class="fa-solid fa-server"></i> New Namespace</label>
-                        <input type="text" id="reg_username" name="username" required placeholder="Pick a secure username">
-                    </div>
-                    <div class="form-group">
-                        <label for="reg_password"><i class="fa-solid fa-key"></i> New Password</label>
-                        <input type="password" id="reg_password" name="password" required placeholder="Choose a secure password">
-                    </div>
-                    <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-tertiary), var(--accent-secondary));">Register System <i class="fa-solid fa-cloud-arrow-up" style="margin-left: 8px;"></i></button>
-                </form>
-            </div>
+    <header>
+        <h1 class="brand-title">
+            <i class="fa-solid fa-graduation-cap" style="margin-right: 12px; color: var(--accent-primary);"></i>
+            EduTwin Core
+        </h1>
+    </header>
+
+    <div class="login-sections">
+
+        <!-- Student Login -->
+        <div class="glass-panel tilt-effect">
+            <h2><i class="fa-solid fa-user-graduate"></i> Student Access</h2>
+            <form action="/student_login" method="POST">
+                <div class="form-group">
+                    <label for="roll_number">Roll Number</label>
+                    <input type="text" id="roll_number" name="roll_number" required>
+                </div>
+                <button type="submit" class="btn-primary">View Results</button>
+            </form>
         </div>
+
+        <!-- Admin Login -->
+        <div class="glass-panel tilt-effect">
+            <h2><i class="fa-solid fa-shield-halved"></i> Admin Access</h2>
+
+            <form action="/admin_login" method="POST">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+
+                    <input type="password" id="password" name="password" required>
+
+                    <!-- ADDED: Show/Hide Toggle -->
+                    <button type="button" class="toggle-password btn-primary" data-target="password">
+                        Show
+                    </button>
+                </div>
+
+                <button type="submit" class="btn-primary">Authenticate</button>
+            </form>
+        </div>
+
+        <!-- Admin Setup -->
+        <div class="glass-panel tilt-effect">
+            <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Admin Setup</h2>
+
+            <form action="/admin_register" method="POST">
+
+                <div class="form-group">
+                    <label for="reg_username">New Username</label>
+                    <input type="text" id="reg_username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg_password">New Password</label>
+
+                    <input type="password" id="reg_password" name="password" required>
+
+                    <!-- ADDED: Show/Hide Toggle -->
+                    <button type="button" class="toggle-password btn-primary" data-target="reg_password">
+                        Show
+                    </button>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    Register System
+                </button>
+            </form>
+        </div>
+
     </div>
-    
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 </html>
