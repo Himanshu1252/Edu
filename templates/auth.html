@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credentials Portal - EduTwin</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+</head>
+
+<body>
+
+<div id="tsparticles"></div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div id="flash-data" style="display: none;">
+[
+{% for category, message in messages %}
+{"category": "{{ category }}", "message": "{{ message }}"}{{ "," if not loop.last else "" }}
+{% endfor %}
+]
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="container">
+    <header>
+        <h1 class="brand-title">
+            <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
+                <i class="fa-solid fa-graduation-cap" style="color: var(--accent-primary);"></i>
+                EduTwin Portal
+            </a>
+        </h1>
+        <a href="/" class="btn-logout"><i class="fa-solid fa-house"></i> Home</a>
+    </header>
+
+    <!-- Tab Switcher Navigation -->
+    <div class="tab-switcher glass-panel" style="display: flex; gap: 10px; padding: 10px; margin-bottom: 30px; justify-content: center; width: max-content; margin-inline: auto;">
+        <button class="tab-btn active" data-tab="student-tab">
+            <i class="fa-solid fa-user-graduate" style="margin-right: 8px;"></i> Student Portal
+        </button>
+        <button class="tab-btn" data-tab="admin-tab">
+            <i class="fa-solid fa-shield-halved" style="margin-right: 8px;"></i> Admin Portal
+        </button>
+    </div>
+
+    <!-- Portal Contents -->
+    <div class="portal-tabs">
+        
+        <!-- STUDENT TAB -->
+        <div id="student-tab" class="tab-content active">
+            <div class="login-sections" style="margin-top: 0;">
+                
+                <!-- Student View Results -->
+                <div class="glass-panel tilt-effect">
+                    <h2><i class="fa-solid fa-search"></i> View Academic Sheets</h2>
+                    
+                    {% if colleges %}
+                    <form action="/student_login" method="POST" id="student-login-form">
+                        <div class="form-group">
+                            <label for="login_college">Select Institution/College</label>
+                            <select id="login_college" name="admin_id" required style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 1rem; outline: none; transition: 0.3s ease;">
+                                <option value="" disabled selected>Choose your college...</option>
+                                {% for college in colleges %}
+                                    <option value="{{ college.id }}">{{ college.username | capitalize }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="login_roll_number">Roll Number / ID</label>
+                            <input type="text" id="login_roll_number" name="roll_number" required placeholder="e.g. 101">
+                        </div>
+
+                        <!-- Verification API Feedback Area -->
+                        <div id="student-verification-box" style="margin-bottom: 20px; padding: 12px; border-radius: 8px; font-size: 0.9rem; display: none;"></div>
+
+                        <button type="submit" id="btn-login-student" class="btn-primary">View Results</button>
+                    </form>
+                    {% else %}
+                    <div style="text-align: center; color: var(--text-secondary); margin-top: 20px; padding: 20px; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;">
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.8rem; color: var(--danger); margin-bottom: 10px; display: block;"></i>
+                        No institutions registered on the platform yet. Register a system administrator account first under the Admin tab.
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Student Registration -->
+                <div class="glass-panel tilt-effect">
+                    <h2><i class="fa-solid fa-user-plus"></i> Candidate Enrollment</h2>
+                    
+                    {% if colleges %}
+                    <form action="/student_register" method="POST">
+                        <div class="form-group">
+                            <label for="reg_name">Full Name</label>
+                            <input type="text" id="reg_name" name="name" required placeholder="e.g. Jane Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg_roll_number">Desired Roll Number</label>
+                            <input type="text" id="reg_roll_number" name="roll_number" required placeholder="e.g. 101">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg_branch">Branch/Department</label>
+                            <input type="text" id="reg_branch" name="branch" required placeholder="e.g. Computer Science">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg_college">Choose College / Institution</label>
+                            <select id="reg_college" name="admin_id" required style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 1rem; outline: none; transition: 0.3s ease;">
+                                <option value="" disabled selected>Choose your college...</option>
+                                {% for college in colleges %}
+                                    <option value="{{ college.id }}">{{ college.username | capitalize }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">Register Profile</button>
+                    </form>
+                    {% else %}
+                    <div style="text-align: center; color: var(--text-secondary); margin-top: 20px; padding: 20px; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;">
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.8rem; color: var(--danger); margin-bottom: 10px; display: block;"></i>
+                        No institutions registered on the platform yet. Register a system administrator account first under the Admin tab.
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ADMIN TAB -->
+        <div id="admin-tab" class="tab-content">
+            <div class="login-sections" style="margin-top: 0;">
+                
+                <!-- Admin Login -->
+                <div class="glass-panel tilt-effect">
+                    <h2><i class="fa-solid fa-lock"></i> Admin Access</h2>
+                    <form action="/admin_login" method="POST">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                            <button type="button" class="toggle-password btn-primary" data-target="password">
+                                Show
+                            </button>
+                        </div>
+                        <button type="submit" class="btn-primary">Authenticate</button>
+                    </form>
+                </div>
+
+                <!-- Admin Setup -->
+                <div class="glass-panel tilt-effect">
+                    <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Admin Setup</h2>
+                    <form action="/admin_register" method="POST">
+                        <div class="form-group">
+                            <label for="reg_username">New Username (College Name)</label>
+                            <input type="text" id="reg_username" name="username" required placeholder="e.g. harvard">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg_password">New Password</label>
+                            <input type="password" id="reg_password" name="password" required>
+                            <button type="button" class="toggle-password btn-primary" data-target="reg_password">
+                                Show
+                            </button>
+                        </div>
+                        <button type="submit" class="btn-primary">Register System</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
