@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduTwin - Accelerate Your Results</title>
+    <title>EduTwin - Academic Verification Portal</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -29,84 +29,111 @@
 {% endif %}
 {% endwith %}
 
-<div class="container">
+<!-- Navigation Bar -->
+<nav class="navbar glass-panel">
+    <h1 class="brand-title" style="margin: 0; font-size: 1.8rem;">
+        <i class="fa-solid fa-graduation-cap" style="color: var(--accent-primary);"></i>
+        EduTwin
+    </h1>
+    <ul class="nav-links">
+        <li><a href="#features" style="color: var(--text-secondary);">Features</a></li>
+        <li><a href="#guide" style="color: var(--text-secondary);">How it Works</a></li>
+        <li><a href="/auth" class="btn-logout" style="border-color: var(--accent-primary); color: var(--text-primary);"><i class="fa-solid fa-right-to-bracket"></i> Portal Access</a></li>
+    </ul>
+</nav>
 
-    <header>
-        <h1 class="brand-title">
-            <i class="fa-solid fa-graduation-cap" style="margin-right: 12px; color: var(--accent-primary);"></i>
-            EduTwin Core
+<div class="container" style="margin-top: 20px;">
+    <!-- Hero Section -->
+    <header class="hero-section" style="flex-direction: column; text-align: center; margin-bottom: 80px; gap: 20px;">
+        <h1 class="hero-title" style="font-size: 3.5rem; font-weight: 700; line-height: 1.2; text-shadow: 0 0 40px rgba(99, 102, 241, 0.2);">
+            Verify Academic Performance <br>
+            <span style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Instantly and Securely</span>
         </h1>
+        <p class="hero-subtitle" style="color: var(--text-secondary); font-size: 1.15rem; max-width: 700px; margin: 0 auto; line-height: 1.6;">
+            EduTwin is a next-generation academic registry portal that enables students to self-enroll, select their institution, and track grade records with absolute transparency.
+        </p>
+        <div style="margin-top: 20px;">
+            <a href="/auth" class="btn-primary" style="display: inline-block; width: auto; padding: 14px 35px; text-decoration: none; border-radius: 8px;">
+                Enter Portal <i class="fa-solid fa-arrow-right-long" style="margin-left: 8px;"></i>
+            </a>
+        </div>
     </header>
 
-    <div class="login-sections">
-
-        <!-- Student Login -->
-        <div class="glass-panel tilt-effect">
-            <h2><i class="fa-solid fa-user-graduate"></i> Student Access</h2>
-            <form action="/student_login" method="POST">
-                <div class="form-group">
-                    <label for="roll_number">Roll Number</label>
-                    <input type="text" id="roll_number" name="roll_number" required>
-                </div>
-                <button type="submit" class="btn-primary">View Results</button>
-            </form>
+    <!-- Features Section -->
+    <section id="features" style="margin-bottom: 100px;">
+        <h2 style="justify-content: center; font-size: 2rem; margin-bottom: 50px;"><i class="fa-solid fa-star"></i> Core Features</h2>
+        <div class="login-sections" style="margin-top: 0;">
+            <div class="glass-panel tilt-effect">
+                <i class="fa-solid fa-hotel" style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 20px; display: block;"></i>
+                <h3 style="font-size: 1.3rem; margin-bottom: 12px;">Multi-College Roster</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                    Colleges act as independent registries. Roll numbers are isolated by college, resolving verification collisions completely.
+                </p>
+            </div>
+            <div class="glass-panel tilt-effect">
+                <i class="fa-solid fa-user-plus" style="font-size: 2.5rem; color: var(--accent-secondary); margin-bottom: 20px; display: block;"></i>
+                <h3 style="font-size: 1.3rem; margin-bottom: 12px;">Student Self-Enrollment</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                    Students register details, majors, and link to their specific institution directly. Administrators then update and verify marksheets.
+                </p>
+            </div>
+            <div class="glass-panel tilt-effect">
+                <i class="fa-solid fa-magnifying-glass-chart" style="font-size: 2.5rem; color: var(--accent-tertiary); margin-bottom: 20px; display: block;"></i>
+                <h3 style="font-size: 1.3rem; margin-bottom: 12px;">Live Record Fetching</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                    Dynamic autocomplete validation. Selecting your college and roll number fetches name information on-the-fly before accessing marksheets.
+                </p>
+            </div>
         </div>
+    </section>
 
-        <!-- Admin Login -->
-        <div class="glass-panel tilt-effect">
-            <h2><i class="fa-solid fa-shield-halved"></i> Admin Access</h2>
+    <!-- Guide / How it Works Section -->
+    <section id="guide" style="margin-bottom: 80px;">
+        <h2 style="justify-content: center; font-size: 2rem; margin-bottom: 50px;"><i class="fa-solid fa-circle-question"></i> How to Use the Portal</h2>
+        
+        <div class="timeline-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+            <div class="glass-panel" style="border-top: 4px solid var(--accent-primary);">
+                <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;"><i class="fa-solid fa-building-columns" style="color: var(--accent-primary);"></i> For Institutions</h3>
+                <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 15px;">
+                    <li style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="background: rgba(99, 102, 241, 0.15); color: var(--accent-primary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; font-weight: bold;">1</span>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Register an administrator account representing your college / university.</p>
+                    </li>
+                    <li style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="background: rgba(99, 102, 241, 0.15); color: var(--accent-primary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; font-weight: bold;">2</span>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">View self-registered student candidates or manually enroll student identifiers.</p>
+                    </li>
+                    <li style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="background: rgba(99, 102, 241, 0.15); color: var(--accent-primary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; font-weight: bold;">3</span>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Record marks for subjects to compute aggregate percentages and grades instantly.</p>
+                    </li>
+                </ul>
+            </div>
 
-            <form action="/admin_login" method="POST">
-
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-
-                    <input type="password" id="password" name="password" required>
-
-                    <!-- ADDED: Show/Hide Toggle -->
-                    <button type="button" class="toggle-password btn-primary" data-target="password">
-                        Show
-                    </button>
-                </div>
-
-                <button type="submit" class="btn-primary">Authenticate</button>
-            </form>
+            <div class="glass-panel" style="border-top: 4px solid var(--accent-secondary);">
+                <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;"><i class="fa-solid fa-graduation-cap" style="color: var(--accent-secondary);"></i> For Students</h3>
+                <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 15px;">
+                    <li style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="background: rgba(236, 72, 153, 0.15); color: var(--accent-secondary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; font-weight: bold;">1</span>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Click "Enter Portal" and navigate to the Student self-registration section.</p>
+                    </li>
+                    <li style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="background: rgba(236, 72, 153, 0.15); color: var(--accent-secondary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; font-weight: bold;">2</span>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Submit your name, roll number, department, and choose your college.</p>
+                    </li>
+                    <li style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="background: rgba(236, 72, 153, 0.15); color: var(--accent-secondary); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; font-weight: bold;">3</span>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Use the Verification login dashboard to instantly pull your mark sheets.</p>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </section>
 
-        <!-- Admin Setup -->
-        <div class="glass-panel tilt-effect">
-            <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Admin Setup</h2>
-
-            <form action="/admin_register" method="POST">
-
-                <div class="form-group">
-                    <label for="reg_username">New Username</label>
-                    <input type="text" id="reg_username" name="username" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="reg_password">New Password</label>
-
-                    <input type="password" id="reg_password" name="password" required>
-
-                    <!-- ADDED: Show/Hide Toggle -->
-                    <button type="button" class="toggle-password btn-primary" data-target="reg_password">
-                        Show
-                    </button>
-                </div>
-
-                <button type="submit" class="btn-primary">
-                    Register System
-                </button>
-            </form>
-        </div>
-
-    </div>
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 40px 0; border-top: 1px solid var(--glass-border); color: var(--text-secondary); font-size: 0.9rem;">
+        <p>&copy; 2026 EduTwin Core. Empowered for Academic Verification & GSSOC Contributions.</p>
+    </footer>
 </div>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>

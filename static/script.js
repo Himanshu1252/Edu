@@ -182,6 +182,103 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- 8. Tab Switcher Logic ---
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-tab');
+
+            tabButtons.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+
+            btn.classList.add('active');
+            const targetContent = document.getElementById(targetId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+                
+                // Re-trigger GSAP animation for glass panels in active tab
+                if (typeof gsap !== "undefined") {
+                    gsap.from(targetContent.querySelectorAll(".glass-panel"), {
+                        y: 30,
+                        opacity: 0,
+                        duration: 0.6,
+                        stagger: 0.1,
+                        ease: "power2.out"
+                    });
+                }
+            }
+        });
+    });
+
+    // --- 9. Dynamic Student Verification AJAX ---
+    const loginCollegeSelect = document.getElementById('login_college');
+    const loginRollInput = document.getElementById('login_roll_number');
+    const verificationBox = document.getElementById('student-verification-box');
+    const studentSubmitBtn = document.getElementById('btn-login-student');
+
+    if (loginCollegeSelect && loginRollInput && verificationBox && studentSubmitBtn) {
+        // Disable button initially until verified
+        studentSubmitBtn.disabled = true;
+        studentSubmitBtn.style.opacity = '0.5';
+        studentSubmitBtn.style.pointerEvents = 'none';
+
+        let verificationDebounce;
+
+        const verifyStudent = async () => {
+            const adminId = loginCollegeSelect.value;
+            const rollNumber = loginRollInput.value.trim();
+
+            if (!adminId || !rollNumber) {
+                verificationBox.style.display = 'none';
+                verificationBox.className = '';
+                verificationBox.innerHTML = '';
+                studentSubmitBtn.disabled = true;
+                studentSubmitBtn.style.opacity = '0.5';
+                studentSubmitBtn.style.pointerEvents = 'none';
+                return;
+            }
+
+            // Show loading
+            verificationBox.style.display = 'flex';
+            verificationBox.className = 'verification-box loading';
+            verificationBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying student profile...';
+
+            try {
+                const response = await fetch(`/api/get_student_details?admin_id=${adminId}&roll_number=${encodeURIComponent(rollNumber)}`);
+                if (!response.ok) throw new Error('API failed');
+
+                const data = await response.json();
+                if (data.found) {
+                    verificationBox.className = 'verification-box success';
+                    verificationBox.innerHTML = `<i class="fa-solid fa-circle-check"></i> Verified: <strong>${data.name}</strong> (${data.branch})`;
+                    studentSubmitBtn.disabled = false;
+                    studentSubmitBtn.style.opacity = '1';
+                    studentSubmitBtn.style.pointerEvents = 'auto';
+                } else {
+                    verificationBox.className = 'verification-box error';
+                    verificationBox.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Profile not registered under this college.';
+                    studentSubmitBtn.disabled = true;
+                    studentSubmitBtn.style.opacity = '0.5';
+                    studentSubmitBtn.style.pointerEvents = 'none';
+                }
+            } catch (err) {
+                console.error(err);
+                verificationBox.className = 'verification-box error';
+                verificationBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Network error during verification.';
+            }
+        };
+
+        const handleInput = () => {
+            clearTimeout(verificationDebounce);
+            verificationDebounce = setTimeout(verifyStudent, 400);
+        };
+
+        loginCollegeSelect.addEventListener('change', verifyStudent);
+        loginRollInput.addEventListener('input', handleInput);
+    }
+
 });
 
 // --- Toast Function ---

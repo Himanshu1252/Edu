@@ -55,13 +55,20 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         if 'admin_id' not in session:
             flash("Please log in to access the dashboard.", "error")
-            return redirect(url_for('index'))
+            return redirect(url_for('auth'))
         return f(*args, **kwargs)
     return decorated_function
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/auth')
+def auth():
+    conn = get_db()
+    colleges = conn.execute('SELECT id, username FROM admins ORDER BY username ASC').fetchall()
+    conn.close()
+    return render_template('auth.html', colleges=colleges)
 
 @app.route('/admin_register', methods=['POST'])
 def admin_register():
@@ -70,7 +77,7 @@ def admin_register():
     
     if len(username) < 3 or len(password) < 4:
         flash('Username and Password must be longer.', 'error')
-        return redirect(url_for('index'))
+        return redirect(url_for('auth'))
         
     password_hash = generate_password_hash(password)
     
@@ -84,7 +91,7 @@ def admin_register():
     finally:
         conn.close()
         
-    return redirect(url_for('index'))
+    return redirect(url_for('auth'))
 
 @app.route('/admin_login', methods=['POST'])
 def admin_login():
@@ -102,15 +109,48 @@ def admin_login():
         return redirect(url_for('admin'))
         
     flash('Invalid username or password', 'error')
-    return redirect(url_for('index'))
+    return redirect(url_for('auth'))
+
+@app.route('/student_register', methods=['POST'])
+def student_register():
+    name = request.form['name'].strip()
+    roll_number = request.form['roll_number'].strip()
+    branch = request.form['branch'].strip()
+    admin_id = request.form.get('admin_id')
+    
+    if not name or not roll_number or not branch or not admin_id:
+        flash('All fields are required for registration.', 'error')
+        return redirect(url_for('auth'))
+        
+    conn = get_db()
+    try:
+        conn.execute(
+            'INSERT INTO students (name, roll_number, branch, admin_id) VALUES (?, ?, ?, ?)',
+            (name, roll_number, branch, admin_id)
+        )
+        conn.commit()
+        flash('Student registration successful! You can now log in.', 'success')
+    except sqlite3.IntegrityError:
+        flash('This Roll Number is already registered under this college!', 'error')
+    finally:
+        conn.close()
+        
+    return redirect(url_for('auth'))
 
 @app.route('/student_login', methods=['POST'])
 def student_login():
     roll_number = request.form['roll_number'].strip()
+    admin_id = request.form.get('admin_id')
     
+    if not roll_number or not admin_id:
+        flash('Please select a college and enter your roll number.', 'error')
+        return redirect(url_for('auth'))
+        
     conn = get_db()
-    # Find most recently created student for this roll number 
-    student = conn.execute('SELECT * FROM students WHERE roll_number = ? ORDER BY id DESC', (roll_number,)).fetchone()
+    student = conn.execute(
+        'SELECT * FROM students WHERE roll_number = ? AND admin_id = ?',
+        (roll_number, admin_id)
+    ).fetchone()
     conn.close()
     
     if student:
@@ -119,14 +159,37 @@ def student_login():
         session['student_name'] = student['name']
         return redirect(url_for('student'))
         
-    flash('Student not found. Please check roll number.', 'error')
-    return redirect(url_for('index'))
+    flash('Student profile not found under the selected college.', 'error')
+    return redirect(url_for('auth'))
+
+@app.route('/api/get_student_details')
+def api_get_student_details():
+    admin_id = request.args.get('admin_id')
+    roll_number = request.args.get('roll_number', '').strip()
+    
+    if not admin_id or not roll_number:
+        return {'found': False, 'message': 'Missing parameters'}, 400
+        
+    conn = get_db()
+    student = conn.execute(
+        'SELECT name, branch FROM students WHERE admin_id = ? AND roll_number = ?',
+        (admin_id, roll_number)
+    ).fetchone()
+    conn.close()
+    
+    if student:
+        return {
+            'found': True,
+            'name': student['name'],
+            'branch': student['branch']
+        }
+    return {'found': False}
 
 @app.route('/logout')
 def logout():
     session.clear()
     flash('You have been logged out.', 'success')
-    return redirect(url_for('index'))
+    return redirect(url_for('auth'))
 
 # Helper function just for generating the letter grade based on percentage
 def determine_grade(percentage):
@@ -271,7 +334,7 @@ def student():
     admin_id = session.get('student_admin_id')
     
     if not roll_number or not admin_id:
-        return redirect(url_for('index'))
+        return redirect(url_for('auth'))
         
     conn = get_db()
     student_info = conn.execute(
@@ -293,7 +356,7 @@ def student():
     
     if not student_info:
         flash("Record disappeared.", "error")
-        return redirect(url_for('index'))
+        return redirect(url_for('auth'))
     
     total = stats['total']
     count = stats['total_subjects']
