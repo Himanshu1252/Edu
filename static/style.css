@@ -191,6 +191,111 @@ input:focus {
   box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
   transform: scale(1.05);
 }
+
+.btn-edit {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--accent-primary);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+.btn-edit:hover {
+  background: rgba(99, 102, 241, 0.3);
+  color: white;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+  transform: scale(1.05);
+}
+
+.btn-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+.btn-success:hover {
+  background: rgba(16, 185, 129, 0.3);
+  color: white;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+  transform: scale(1.05);
+}
+
+.btn-secondary {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--text-secondary);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+.btn-secondary:hover {
+  background: rgba(148, 163, 184, 0.3);
+  color: white;
+  box-shadow: 0 0 20px rgba(148, 163, 184, 0.6);
+  transform: scale(1.05);
+}
+
+.edit-marks-input {
+  width: 100px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.edit-marks-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+}
+
+/* Hide Chrome/Safari/Opera/Edge spin-buttons */
+.edit-marks-input::-webkit-outer-spin-button,
+.edit-marks-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide Firefox spin-buttons */
+.edit-marks-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.add-subject-input {
+  width: 120px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.add-subject-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+}
+
 .btn-logout {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
