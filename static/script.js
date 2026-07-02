@@ -279,6 +279,149 @@ document.addEventListener('DOMContentLoaded', () => {
         loginRollInput.addEventListener('input', handleInput);
     }
 
+    // --- 10. Subject Marks Editing & Deletion Logic ---
+    const editButtons = document.querySelectorAll('.btn-edit-trigger');
+    const cancelButtons = document.querySelectorAll('.btn-cancel-trigger');
+    const editForms = document.querySelectorAll('.edit-subject-form');
+    const deleteSubjectForms = document.querySelectorAll('.delete-subject-form');
+    const editMarksInputs = document.querySelectorAll('.edit-marks-input');
+
+    editButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const rowId = this.getAttribute('data-row');
+            const row = document.getElementById(`row-${rowId}`);
+            if (!row) return;
+
+            row.querySelector('.marks-display').style.display = 'none';
+            row.querySelector('.edit-marks-container').style.display = 'block';
+            row.querySelector('.action-buttons-display').style.display = 'none';
+            row.querySelector('.action-buttons-edit').style.display = 'inline-flex';
+        });
+    });
+
+    cancelButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const rowId = this.getAttribute('data-row');
+            const row = document.getElementById(`row-${rowId}`);
+            if (!row) return;
+
+            // Reset original value
+            const input = row.querySelector('.edit-marks-input');
+            if (input) {
+                input.value = input.getAttribute('data-original-val');
+            }
+
+            row.querySelector('.marks-display').style.display = 'block';
+            row.querySelector('.edit-marks-container').style.display = 'none';
+            row.querySelector('.action-buttons-display').style.display = 'inline-flex';
+            row.querySelector('.action-buttons-edit').style.display = 'none';
+        });
+    });
+
+    editMarksInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            let value = parseInt(this.value);
+            if (isNaN(value) || value < 0) this.value = 0;
+            else if (value > 100) this.value = 100;
+            else this.value = value;
+        });
+    });
+
+    editForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const rowId = this.getAttribute('data-row');
+            const row = document.getElementById(`row-${rowId}`);
+            if (!row) return;
+
+            const input = row.querySelector('.edit-marks-input');
+            const value = parseInt(input.value);
+
+            if (isNaN(value) || value < 0 || value > 100) {
+                alert('Marks must be an integer between 0 and 100.');
+                e.preventDefault();
+                return;
+            }
+
+            form.querySelector('.form-marks-input').value = value;
+        });
+    });
+
+    deleteSubjectForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const subject = this.getAttribute('data-subject');
+            if (!confirm(`Are you sure you want to delete the subject "${subject}"? This cannot be undone.`)) {
+                e.preventDefault();
+            }
+        });
+    });
+
+    // --- 11. Inline Add Marks Logic (For students with no subjects) ---
+    const addMarksButtons = document.querySelectorAll('.btn-add-marks-trigger');
+    const cancelAddButtons = document.querySelectorAll('.btn-cancel-add-trigger');
+    const addForms = document.querySelectorAll('.add-subject-form');
+
+    addMarksButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const rowId = this.getAttribute('data-row');
+            const row = document.getElementById(`row-${rowId}`);
+            if (!row) return;
+
+            row.querySelector('.subject-display').style.display = 'none';
+            row.querySelector('.add-subject-container').style.display = 'block';
+            row.querySelector('.marks-display').style.display = 'none';
+            row.querySelector('.edit-marks-container').style.display = 'block';
+            row.querySelector('.action-buttons-display').style.display = 'none';
+            row.querySelector('.action-buttons-add').style.display = 'inline-flex';
+        });
+    });
+
+    cancelAddButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const rowId = this.getAttribute('data-row');
+            const row = document.getElementById(`row-${rowId}`);
+            if (!row) return;
+
+            row.querySelector('.add-subject-input').value = '';
+            row.querySelector('.edit-marks-input').value = '';
+
+            row.querySelector('.subject-display').style.display = 'block';
+            row.querySelector('.add-subject-container').style.display = 'none';
+            row.querySelector('.marks-display').style.display = 'block';
+            row.querySelector('.edit-marks-container').style.display = 'none';
+            row.querySelector('.action-buttons-display').style.display = 'inline-flex';
+            row.querySelector('.action-buttons-add').style.display = 'none';
+        });
+    });
+
+    addForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const rowId = this.getAttribute('data-row');
+            const row = document.getElementById(`row-${rowId}`);
+            if (!row) return;
+
+            const subjectInput = row.querySelector('.add-subject-input');
+            const subjectValue = subjectInput.value.trim();
+
+            const marksInput = row.querySelector('.edit-marks-input');
+            const marksValue = parseInt(marksInput.value);
+
+            if (!subjectValue) {
+                alert('Subject name is required.');
+                e.preventDefault();
+                return;
+            }
+
+            if (isNaN(marksValue) || marksValue < 0 || marksValue > 100) {
+                alert('Marks must be an integer between 0 and 100.');
+                e.preventDefault();
+                return;
+            }
+
+            form.querySelector('.form-subject-input').value = subjectValue;
+            form.querySelector('.form-marks-input').value = marksValue;
+        });
+    });
+
 });
 
 // --- Toast Function ---

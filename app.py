@@ -269,6 +269,51 @@ def admin():
             conn.commit()
             flash('Student and records deleted successfully!', 'success')
             
+        elif action == 'edit_subject':
+            roll_number = request.form['roll_number'].strip()
+            subject = request.form['subject'].strip()
+            try:
+                marks = int(request.form['marks'])
+            except ValueError:
+                marks = -1
+            
+            if marks < 0 or marks > 100:
+                flash('Marks must be legitimately between 0 and 100', 'error')
+            else:
+                student_exists = conn.execute(
+                    'SELECT 1 FROM students WHERE roll_number = ? AND admin_id = ?',
+                    (roll_number, admin_id)
+                ).fetchone()
+                
+                if not student_exists:
+                    flash('A student with this roll number does not exist in your records.', 'error')
+                else:
+                    conn.execute(
+                        'UPDATE marks SET marks = ? WHERE roll_number = ? AND subject = ? AND admin_id = ?',
+                        (marks, roll_number, subject, admin_id)
+                    )
+                    conn.commit()
+                    flash(f'Marks updated successfully for {subject}!', 'success')
+
+        elif action == 'delete_subject':
+            roll_number = request.form['roll_number'].strip()
+            subject = request.form['subject'].strip()
+            
+            student_exists = conn.execute(
+                'SELECT 1 FROM students WHERE roll_number = ? AND admin_id = ?',
+                (roll_number, admin_id)
+            ).fetchone()
+            
+            if not student_exists:
+                flash('A student with this roll number does not exist in your records.', 'error')
+            else:
+                conn.execute(
+                    'DELETE FROM marks WHERE roll_number = ? AND subject = ? AND admin_id = ?',
+                    (roll_number, subject, admin_id)
+                )
+                conn.commit()
+                flash(f'Subject {subject} deleted successfully!', 'success')
+            
     # Step 1: Get per-student totals for percentage/grade calculation
     totals_query = '''
         SELECT 
@@ -320,6 +365,7 @@ def admin():
             'branch': r['branch'],
             'subject': r['subject'] if r['subject'] else '—',
             'marks': f"{r['marks']}/100" if r['marks'] is not None else '—',
+            'marks_raw': r['marks'] if r['marks'] is not None else '',
             'total': f"{stats['total']}/{max_marks}" if max_marks > 0 else '0',
             'percentage': stats['percentage'],
             'grade': stats['grade']

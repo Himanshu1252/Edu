@@ -96,21 +96,73 @@
                     <tbody>
                         {% if students %}
                             {% for student in students %}
-                            <tr>
+                            <tr id="row-{{ loop.index }}">
                                 <td style="font-weight: 500; color: var(--accent-primary);">{{ student.roll_number }}</td>
                                 <td>{{ student.name }}</td>
                                 <td>{{ student.branch }}</td>
-                                <td>{{ student.subject }}</td>
-                                <td>{{ student.marks }}</td>
+                                <td>
+                                    <span class="subject-display">{{ student.subject }}</span>
+                                    {% if student.subject == '—' %}
+                                    <div class="add-subject-container" style="display: none; margin-top: 4px;">
+                                        <input type="text" class="add-subject-input" placeholder="Subject" style="width: 120px; padding: 4px 8px;">
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="marks-display">{{ student.marks }}</span>
+                                    <div class="edit-marks-container" style="display: none; margin-top: 4px;">
+                                        {% if student.subject != '—' %}
+                                        <input type="number" class="edit-marks-input" value="{{ student.marks_raw }}" data-original-val="{{ student.marks_raw }}" min="0" max="100" step="1">
+                                        {% else %}
+                                        <input type="number" class="edit-marks-input" value="" min="0" max="100" step="1" placeholder="Marks">
+                                        {% endif %}
+                                    </div>
+                                </td>
                                 <td>{{ student.total }}</td>
                                 <td>{{ student.percentage }}%</td>
                                 <td><strong class="{% if student.grade == 'F' %}grade-fail{% else %}grade-excellent{% endif %}">{{ student.grade }}</strong></td>
                                 <td>
-                                    <form action="/admin" method="POST" style="display:inline;">
-                                        <input type="hidden" name="action" value="delete_student">
-                                        <input type="hidden" name="roll_number" value="{{ student.roll_number }}">
-                                        <button type="submit" class="btn-danger"><i class="fa-solid fa-trash-can"></i> Revoke</button>
-                                    </form>
+                                    <div class="action-buttons-display" style="display: inline-flex; gap: 8px; align-items: center;">
+                                        <form action="/admin" method="POST" style="display:inline;">
+                                            <input type="hidden" name="action" value="delete_student">
+                                            <input type="hidden" name="roll_number" value="{{ student.roll_number }}">
+                                            <button type="submit" class="btn-danger"><i class="fa-solid fa-trash-can"></i> Revoke</button>
+                                        </form>
+                                        {% if student.subject != '—' %}
+                                        <button type="button" class="btn-edit btn-edit-trigger" data-row="{{ loop.index }}"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                                        <form action="/admin" method="POST" style="display:inline;" class="delete-subject-form" data-subject="{{ student.subject }}">
+                                            <input type="hidden" name="action" value="delete_subject">
+                                            <input type="hidden" name="roll_number" value="{{ student.roll_number }}">
+                                            <input type="hidden" name="subject" value="{{ student.subject }}">
+                                            <button type="submit" class="btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+                                        </form>
+                                        {% else %}
+                                        <button type="button" class="btn-edit btn-add-marks-trigger" data-row="{{ loop.index }}"><i class="fa-solid fa-plus"></i> Add Marks</button>
+                                        {% endif %}
+                                    </div>
+                                    {% if student.subject != '—' %}
+                                    <div class="action-buttons-edit" style="display: none; gap: 8px; align-items: center;">
+                                        <form action="/admin" method="POST" style="display:inline;" class="edit-subject-form" data-row="{{ loop.index }}">
+                                            <input type="hidden" name="action" value="edit_subject">
+                                            <input type="hidden" name="roll_number" value="{{ student.roll_number }}">
+                                            <input type="hidden" name="subject" value="{{ student.subject }}">
+                                            <input type="hidden" name="marks" class="form-marks-input" value="">
+                                            <button type="submit" class="btn-success"><i class="fa-solid fa-check"></i> Save</button>
+                                        </form>
+                                        <button type="button" class="btn-secondary btn-cancel-trigger" data-row="{{ loop.index }}"><i class="fa-solid fa-xmark"></i> Cancel</button>
+                                    </div>
+                                    {% else %}
+                                    <div class="action-buttons-add" style="display: none; gap: 8px; align-items: center;">
+                                        <form action="/admin" method="POST" style="display:inline;" class="add-subject-form" data-row="{{ loop.index }}">
+                                            <input type="hidden" name="action" value="add_marks">
+                                            <input type="hidden" name="roll_number" value="{{ student.roll_number }}">
+                                            <input type="hidden" name="subject" class="form-subject-input" value="">
+                                            <input type="hidden" name="marks" class="form-marks-input" value="">
+                                            <button type="submit" class="btn-success"><i class="fa-solid fa-check"></i> Save</button>
+                                        </form>
+                                        <button type="button" class="btn-secondary btn-cancel-add-trigger" data-row="{{ loop.index }}"><i class="fa-solid fa-xmark"></i> Cancel</button>
+                                    </div>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
